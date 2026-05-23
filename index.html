@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Advisory - UNTAN Subdomain Takeover</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #00ff00;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #ff0000; padding-bottom: 20px; }
+        .critical { color: #ff0000; font-size: 32px; font-weight: bold; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
+        .subdomain { font-size: 24px; color: #ffff00; margin: 20px 0; }
+        .card {
+            background: rgba(0,0,0,0.8);
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .card h3 { color: #ff6600; margin-bottom: 15px; }
+        .card ul { margin-left: 30px; line-height: 1.8; }
+        .proof { background: #0a0a0a; border-left: 4px solid #ff0000; padding: 15px; margin: 15px 0; }
+        .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 12px; }
+        .badge { display: inline-block; background: #ff0000; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; margin-right: 10px; }
+        button { background: #00ff00; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #ff0000; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="critical">🔴 CRITICAL SECURITY VULNERABILITY 🔴</h1>
+            <h2>Subdomain Takeover - Universitas Tanjungpura</h2>
+            <div class="subdomain" id="subdomainDisplay"></div>
+        </div>
+
+        <div class="card">
+            <h3>📋 VULNERABILITY DETAILS</h3>
+            <p><span class="badge">CWE-601</span> Subdomain Takeover / DNS Hijacking</p>
+            <div class="proof">
+                <strong>Technical Proof:</strong><br>
+                - DNS Record: <span style="color:#ff0000">TIDAK ADA (ANSWER: 0)</span><br>
+                - HTTP Response: <span style="color:#ff0000">ERR_NAME_NOT_RESOLVED</span><br>
+                - Status: <span style="color:#ff0000">VULNERABLE - CAN BE TAKEN OVER</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>⚠️ AFFECTED SUBDOMAINS</h3>
+            <div class="proof">
+                🔴 cdn.untan.ac.id<br>
+                🔴 admin.untan.ac.id<br>
+                🔴 dev.untan.ac.id<br>
+                🔴 staging.untan.ac.id<br>
+                🔴 blog.untan.ac.id<br>
+                🔴 ftp.untan.ac.id
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🛠️ REMEDIATION RECOMMENDATION</h3>
+            <ul>
+                <li>Login ke Cloudflare DNS Management</li>
+                <li>Hapus subdomain yang tidak digunakan dari DNS zone</li>
+                <li>Atau tambahkan A record yang valid</li>
+                <li>Implementasikan DNS monitoring</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>📞 CONTACT UNTAN SECURITY TEAM</h3>
+            <div class="proof">
+                📧 Email: admcloud@untan.ac.id<br>
+                📱 WhatsApp: 6285845408925
+            </div>
+            <button onclick="copyReport()">📋 Copy Report for Admin</button>
+        </div>
+
+        <div class="footer">
+            <p>This is a Proof of Concept (PoC) for responsible disclosure.<br>
+            Reported by: Security Researcher | Date: <span id="date"></span></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('subdomainDisplay').innerHTML = `📍 Current: <strong style="color:#ffff00">${window.location.hostname}</strong>`;
+        document.getElementById('date').innerHTML = new Date().toLocaleString('id-ID');
+        
+        function copyReport() {
+            const report = `[SECURITY] Subdomain Takeover - UNTAN.ac.id
+
+Affected Subdomains:
+- cdn.untan.ac.id
+- admin.untan.ac.id
+- dev.untan.ac.id
+- staging.untan.ac.id
+- blog.untan.ac.id
+- ftp.untan.ac.id
+
+Technical Details:
+- No DNS records exist (ANSWER: 0)
+- HTTP requests return ERR_NAME_NOT_RESOLVED
+- Anyone can claim these subdomains on hosting platforms
+
+Risk: Phishing, XSS, Malware distribution
+
+Fix: Remove unused subdomains from Cloudflare DNS zone`;
+            navigator.clipboard.writeText(report);
+            alert('✅ Report copied! Send to admcloud@untan.ac.id');
+        }
+    </script>
+</body>
+</html>
